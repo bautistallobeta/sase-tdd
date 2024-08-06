@@ -7,25 +7,37 @@
 static uint8_t MAX_VALUES[] = {2, 9, 5, 9, 5, 9};
 
 struct clocks_s {
+    /* Variable que guarda la hora actual del reloj */
     uint8_t time[TIME_SIZE];
-    uint8_t alarm[TIME_SIZE];     /* Variable que guarda la hora de la alarma seteada*/
-    uint8_t nextAlarm[TIME_SIZE]; /* Variable que guarda la proxima hora a la que debe sonar (solo es != de alarm[] si se pospone la misma) */
+    /* Variable que guarda la hora seteada para la alarma */
+    uint8_t alarm[TIME_SIZE];
+    /* Variable que guarda la proxima hora a la que debe sonar (solo es != de alarm[] si se pospone la misma) */
+    uint8_t nextAlarm[TIME_SIZE];
+    /* Contador de ticks para el avance del tiempo */
     uint16_t ticksCount;
+    /* Variable de estado de validez de la hora */
     bool valid;
+    /* Variable de estaod de validez de la alarma */
     bool alarmValid;
+    /* Variable de estado de activacion de la alarma ( true = sonando ; false = apagada ) */
     bool alarmActivated;
-    clocks_event_t EventHandler; /* Es una variable puntero que apunta a una funcion*/
+    /* Variable puntero que apunta a una funcion*/
+    clocks_event_t EventHandler;
 };
 
 static struct clocks_s instances;
 
 clocks_t createClock(uint16_t ticks, clocks_event_t event_handler) {
-    memset(&instances, 0, sizeof(instances)); /* Setear el array al valor esperado */
+    /* Setear el array al valor esperado */
+    memset(&instances, 0, sizeof(instances));
+    /* Inicializacion de ticks */
     instances.ticksCount = 0;
+    /* Inicializacion de variables de estado de validez */
     instances.valid = false;
     instances.alarmValid = false;
-    instances.EventHandler = event_handler;
     instances.alarmActivated = false;
+    /* Asignacion del event handler a la funcion definida en el archivo 'test_reloj' */
+    instances.EventHandler = event_handler;
     return &instances;
 }
 
@@ -52,6 +64,9 @@ void newTick(clocks_t clk) {
     }
 }
 
+/**
+ * @test @ref test_set_time
+ */
 void increaseTime(uint8_t time[]) {
     for (int i = (TIME_SIZE - 1); i >= 0; i--) {
         if (time[i] < MAX_VALUES[i]) {

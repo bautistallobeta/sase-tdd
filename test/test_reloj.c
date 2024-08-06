@@ -20,6 +20,12 @@ clocks_t reloj;
 /* Variable de estado de activacion de la alarma (true = sonando ; false = apagada) */
 static bool alarmaActivada;
 
+/**/
+/*==================================================================*/
+/*=====================  FUNCIONES AUXILIARES  =====================*/
+/*==================================================================*/
+/**/
+
 /* Funcion auxiliar para simular el paso de n ticks */
 void simulateTicks(uint32_t ticks) {
     for (int i = 0; i < ticks; i++) {
@@ -43,7 +49,13 @@ void setUp() {
     setTime(reloj, INICIAL, sizeof(INICIAL));
 }
 
-/* Test de inicializacion del reloj */
+/**/
+/*==================================================================*/
+/*===================  TESTS DE SETEO DEL RELOJ  ===================*/
+/*==================================================================*/
+/**/
+
+/** @test  Test de inicializacion del reloj */
 void test_start_up(void) {
     /*Array con la hora esperada*/
     static const uint8_t ESPERADO[] = {0, 0, 0, 0, 0, 0};
@@ -59,7 +71,7 @@ void test_start_up(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test de seteo de hora */
+/** @brief  Test de seteo de hora */
 void test_set_time(void) {
     /*Array que con la hora esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 0};
@@ -72,7 +84,13 @@ void test_set_time(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test del paso de un segundo */
+/**/
+/*==================================================================*/
+/*===================  TESTS DE PASO DEL TIEMPO  ===================*/
+/*==================================================================*/
+/**/
+
+/** @test  Test del paso de un segundo */
 void test_one_second(void) {
     /*Array que con la hora esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 1};
@@ -88,7 +106,7 @@ void test_one_second(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test del paso de 10 segundos */
+/** @test  Test del paso de 10 segundos */
 void test_ten_seconds(void) {
     /*Array que con la hora esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 3, 4, 1, 0};
@@ -102,7 +120,7 @@ void test_ten_seconds(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test del paso de 1 minuto */
+/** @test  Test del paso de 1 minuto */
 void test_one_minute(void) {
     /*Array que con la hora esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 3, 5, 0, 0};
@@ -116,7 +134,7 @@ void test_one_minute(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test del paso de 10 minutos */
+/** @test  Test del paso de 10 minutos */
 void test_ten_minutes(void) {
     /*Array que con la hora esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
@@ -130,7 +148,7 @@ void test_ten_minutes(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test del paso de 1 hora */
+/** @test  Test del paso de 1 hora */
 void test_one_hour(void) {
     /*Array que con la hora esperada*/
     static const uint8_t ESPERADO[] = {1, 3, 3, 4, 0, 0};
@@ -144,7 +162,7 @@ void test_one_hour(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test del paso de 10 horas */
+/** @test  Test del paso de 10 horas */
 void test_ten_hours(void) {
     /*Array que con la hora esperada*/
     static const uint8_t ESPERADO[] = {2, 2, 3, 4, 0, 0};
@@ -158,7 +176,7 @@ void test_ten_hours(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test del paso de 1 dia */
+/** @test  Test del paso de 1 dia */
 void test_one_day(void) {
     /*Array que con la hora esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 0};
@@ -172,7 +190,13 @@ void test_one_day(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test de seteo y activacion de alarma*/
+/**/
+/*==================================================================*/
+/*============  TESTS DE SETEO Y ACTIVACION DE ALARMA  =============*/
+/*==================================================================*/
+/**/
+
+/** @test  Test de seteo y activacion de alarma*/
 void test_set_alarm(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 4, 0, 0, 0};
@@ -184,7 +208,7 @@ void test_set_alarm(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, TIME_SIZE);
 }
 
-/* Test de desactivacion de alarma (ACLARACION: no es el apagado o posposición de la alarma)*/
+/** @test  Test de desactivacion de alarma (ACLARACION: no es el apagado o posposición de la alarma)*/
 void test_desactivate_alarm(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 4, 0, 0, 5};
@@ -198,7 +222,7 @@ void test_desactivate_alarm(void) {
     TEST_ASSERT_FALSE(getAlarm(reloj, hora, TIME_SIZE));
 }
 
-/*Test de alarma activada, no suena hasta llegar la hora seteada*/
+/** @test Test de alarma activada, no suena hasta llegar la hora seteada*/
 void test_alarm_activated_on(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ALARMA[] = {1, 2, 4, 0, 0, 0};
@@ -212,7 +236,7 @@ void test_alarm_activated_on(void) {
     TEST_ASSERT_TRUE(alarmaActivada);
 }
 
-/*Test de alarma, el reloj llega a la hora seteada pero la alarma esta desactivada*/
+/** @test Test de alarma, el reloj llega a la hora seteada pero la alarma esta desactivada*/
 void test_alarm_desactivated_off(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ESPERADO[] = {1, 2, 4, 0, 0, 0};
@@ -228,7 +252,7 @@ void test_alarm_desactivated_off(void) {
     TEST_ASSERT_FALSE(alarmaActivada);
 }
 
-/*Test de alarma, la alarma suena y pasan 24hs sin pararse ni posponerse (debe seguir sonando)*/
+/** @test Test de alarma, la alarma suena y pasan 24hs sin pararse ni posponerse (debe seguir sonando)*/
 void test_alarm_already_on(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ALARMA[] = {1, 2, 4, 0, 0, 0};
@@ -243,7 +267,13 @@ void test_alarm_already_on(void) {
     TEST_ASSERT_TRUE(alarmaActivada);
 }
 
-/* Test de alarma, se apaga la alarma cuando SI esta sonando (ACLARACIÓN: no es la desactivacion de la alarma) */
+/**/
+/*==================================================================*/
+/*==================  TESTS DE APAGADO DE ALARMA  ==================*/
+/*==================================================================*/
+/**/
+
+/** @test  Test de alarma, se apaga la alarma cuando SI esta sonando (ACLARACIÓN: no es la desactivacion de la alarma) */
 void test_alarm_shut(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ALARMA[] = {1, 2, 4, 0, 0, 0};
@@ -255,13 +285,19 @@ void test_alarm_shut(void) {
     TEST_ASSERT_FALSE(alarmaActivada);
 }
 
-/*Test de alarma, se apaga de la alarma cuando NO esta sonando (no debe suceder nada)*/
+/** @test Test de alarma, se apaga de la alarma cuando NO esta sonando (no debe suceder nada)*/
 void test_alarm_shut_when_off(void) {
     shutAlarm(reloj, TIME_SIZE);
     TEST_ASSERT_FALSE(alarmaActivada);
 }
 
-/* Test de posposicion de alarma cuando SI esta sonando*/
+/**/
+/*==================================================================*/
+/*================  TESTS DE POSPOSICION DE ALARMA  ================*/
+/*==================================================================*/
+/**/
+
+/** @test Test de alarma, se pospone cuando SI esta sonando*/
 void test_alarm_postponed(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ALARMA[] = {1, 2, 4, 0, 0, 0};
@@ -277,7 +313,7 @@ void test_alarm_postponed(void) {
     TEST_ASSERT_FALSE(alarmaActivada);
 }
 
-/* Test de alarma, se pospone pero no estaba sonando (no deberia ocurrir nada)*/
+/** @test Test de alarma, se pospone pero no estaba sonando (no deberia ocurrir nada)*/
 void test_alarm_postponed_off(void) {
     /* Constante con la cantidad de minutos que se desea posponer */
     static const uint8_t N_MINUTOS = 5;
@@ -287,7 +323,7 @@ void test_alarm_postponed_off(void) {
     TEST_ASSERT_FALSE(alarmaActivada);
 }
 
-/* Test de alarma,  es pospone n minutos, y no suena hasta pasarse n minutos*/
+/** @test Test de alarma,  es pospone n minutos, y no suena hasta pasarse n minutos*/
 void test_alarm_postponed_on(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ALARMA[] = {1, 2, 4, 0, 0, 0};
@@ -307,7 +343,7 @@ void test_alarm_postponed_on(void) {
     TEST_ASSERT_TRUE(alarmaActivada);
 }
 
-/* Test de alarma, se pospone dos veces, n minutos la primera vez, y m minutos la segunda*/
+/** @test Test de alarma, se pospone dos veces, n minutos la primera vez, y m minutos la segunda*/
 void test_alarm_postponed_on_twice(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ALARMA[] = {1, 2, 4, 0, 0, 0};
@@ -332,7 +368,7 @@ void test_alarm_postponed_on_twice(void) {
     TEST_ASSERT_TRUE(alarmaActivada);
 }
 
-/* Test de alarma, suena, se pospone 5 minutos y luego se apaga. No debe volver a sonar hasta que pasan 23HS 55 minutos */
+/** @test Test de alarma, suena, se pospone 5 minutos y luego se apaga. No debe volver a sonar hasta que pasan 23HS 55 minutos */
 void test_alarm_postponed_and_shut(void) {
     /*Array que con la alarma esperada*/
     static const uint8_t ALARMA[] = {1, 2, 4, 0, 0, 0};
@@ -356,7 +392,7 @@ void test_alarm_postponed_and_shut(void) {
     TEST_ASSERT_TRUE(alarmaActivada);
 }
 
-/* Test de alarma, se pospone para un horario posterior a las 23:59 */
+/** @test Test de alarma, se pospone para un horario posterior a las 23:59 */
 void test_alarm_postponed_midnight(void) {
     /*Array con la hora a setear*/
     static const uint8_t HORA[] = {2, 3, 5, 0, 0, 0};
@@ -379,7 +415,7 @@ void test_alarm_postponed_midnight(void) {
     TEST_ASSERT_TRUE(alarmaActivada);
 }
 
-/* Test, la alarma se debe posponer 5 minutos DESDE que se pospone */
+/** @test Test, la alarma se debe posponer 5 minutos DESDE que se pospone */
 void test_alarm_postponed_5_min(void) {
     /*Array con la alarma esperada*/
     static const uint8_t ALARMA[] = {1, 2, 4, 0, 0, 0};
